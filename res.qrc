@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/images">
+        <file alias="doc-open">res/file down.png</file>
+        <file alias="clear">res/error 2.png</file>
+    </qresource>
+</RCC>
