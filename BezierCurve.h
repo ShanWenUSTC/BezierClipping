@@ -23,6 +23,7 @@ public:
     void calConvexHull(std::vector<double> x, std::vector<double> y, 
                        std::vector<double>& hullx, std::vector<double>& hully);
     int order();
+    std::vector<point> controlPoint();
 
 private:
     float base(double t);         // Bernstein base function

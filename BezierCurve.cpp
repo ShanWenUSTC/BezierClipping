@@ -197,3 +197,8 @@ int BezierCurve::order()
 {
     return m_vConPoint.size();
 }
+
+std::vector<point> BezierCurve::controlPoint()
+{
+    return m_vConPoint;
+}

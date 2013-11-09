@@ -72,6 +72,11 @@ void myMainWindow::convexhull()
     pGL->convexhull();
 }
 
+void myMainWindow::findRoot()
+{
+    pGL->findRoot();
+}
+
 void myMainWindow::design_menubar()
 {
     pMenuBar = menuBar();
@@ -90,6 +95,7 @@ void myMainWindow::design_toolbar()
     pToolBar = addToolBar(tr("&File"));
     pToolBar->addAction(openAction);
     pToolBar->addAction(clearAction);
+    pToolBar->addAction(findRootAction);
 }
 
 void myMainWindow::design_statusbar()
@@ -114,4 +120,7 @@ void myMainWindow::design_action()
     chAction = new QAction(QIcon(":/images/doc-open"), tr("&Convex Hull"), this);
     chAction->setStatusTip(tr("Show Convex Hull of control points"));
     connect(chAction, &QAction::triggered, this, &myMainWindow::convexhull);
+
+    findRootAction = new QAction(QIcon(":/images/doc-open"), tr("&Convex Hull"), this);
+    connect(findRootAction, &QAction::triggered, this, &myMainWindow::findRoot);
 }

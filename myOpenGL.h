@@ -7,6 +7,7 @@
 #include <QKeyEvent>
 
 class BezierCurve;
+class BezierClip;
 class myOpenGL : public QGLWidget
 {
     Q_OBJECT
@@ -17,6 +18,7 @@ public:
 
     void clear();
     void convexhull();
+    void findRoot();
 
 protected:
     void initializeGL();
@@ -31,6 +33,7 @@ private:
 
 private:
     BezierCurve* m_pBezierCurve;
+    BezierClip *m_pClip;
     GLdouble x_max;
     GLdouble y_max;
     int m_status;

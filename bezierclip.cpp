@@ -1,5 +1,8 @@
 #include "bezierclip.h"
 #include "BezierCurve.h"
+#include "graham.h"
+
+#include <QtGui/qopengl.h>
 #include <math.h>
 #include <qDebug>
 
@@ -17,74 +20,114 @@ BezierClip::~BezierClip()
     }
 }
 
-void BezierClip::findroot(std::list<interval>& root,
-                          std::list<interval>::iterator iter)
+void BezierClip::findroot()
 {
-    std::vector<double> t(m_nOrder);
-    std::vector<double> hullt;
-    std::vector<double> hully;
-
-    for(size_t i=0; i<m_nOrder; i++)
+    if( m_lInterval.size()!=0 )
     {
-        t[i] = i*1.0/(m_nOrder-1);
+        m_lInterval.clear();
     }
 
-    CGraham graham;
-    graham.convex_hull(t, (*iter).y, hullx, hully);
+    m_vConvexhull.clear();
+    m_lInterval.push_back( m_pBezierClip->controlPoint() );
 
-    std::vector<double> vtmp;
-    for(size_t i=0; i<hullx.size()-1; i++)
+    while( !(m_lInterval.size()==0) )
     {
-        if(hully[i]*hull[i+1]<0)
-        {
-            double scale = abs( hully[i+1]/hully[i] );
-            vtmp.push_back( hullx[i]*scale+hullx[i+1]*(1-scale) );
-        }
-    }
-
-    qDebug()<<"size of vtmp: "<<tmp.size();
-    if(vtmp.size() == 0)
-    {
-        erase(iter);
-    }
-    else
-    {
-       double tmp;
-       if(vtmp[0]>vtmp[1])
-       {
-           tmp = vtmp[0];
-           vtmp[0] = vtmp[1];
-           vtmp[1] = tmp;
-       }
-    }
-
-    if( vtmp[1]-vtmp[0]<0.001 )
-    {
-        m_vRoot.push_back(vtmp[0]);
-        erase(iter);
-    }
-    else
-    {
-        std::vector<double> conx;
-        std::vector<double> cony;
-
-        deCasteljau(vtmp[1], )
+        updateInterval( m_lInterval.front() );
+        m_lInterval.pop_front();
     }
 }
 
-void BezierClip::deCasteljau(double scale, std::vector<double>& in,
-                             std::vector<double>& outfront, std::vector<double>& outback)
+void BezierClip::updateInterval(conPoints& inConPoint)
 {
-    std::vector<double> current(in);
-    std::vector<double> last;
+    std::vector<double> t(m_nOrder);
+    std::vector<double> y(m_nOrder);
+    std::vector<double> hullt;
+    std::vector<double> hully;
 
-    if( !(out.size()==0) )
+    for(int i=0; i<m_nOrder; i++)
     {
-        out.resize(0);
+        t[i] = i*1.0/(m_nOrder-1);
+        y[i] = inConPoint[i].y;
+    }
+
+    // convexhull of control polygon
+    CGraham graham;
+    graham.convex_hull(t, y, hullt, hully);
+
+    std::vector<double> vtmp;
+    for(size_t i=0; i<hullt.size()-1; i++)
+    {
+        if(hully[i]*hully[i+1]<0)
+        {
+         //   double scale = abs( hully[i+1]/hully[i] );
+            double scale = abs( hully[i+1]/( abs(hully[i+1])+abs(hully[i]) ) );
+            qDebug()<<"convex scale:"<<scale;
+//            qDebug()<<hullt[i+1]<<hullt[i];
+ //           vtmp.push_back( (hullt[i]*scale+hullt[i+1])/(scale+1.0) );
+            vtmp.push_back( hullt[i]*scale+hullt[i+1]*(1-scale) );
+        }
+    }
+
+    if(vtmp.size() == 0)
+    {
+        return;
+    }
+    else
+    {
+        conPoints front1;
+        conPoints front2;
+        conPoints back;
+        conPoints outConPoint;
+
+   //     qDebug()<<"vtmp:"<<vtmp.size()<<vtmp[0]<<vtmp[1];
+        deCasteljau(vtmp[1], inConPoint, front1, back);
+        deCasteljau(vtmp[0]/vtmp[1], front1, front2, outConPoint);
+
+        double delta = abs( outConPoint.front().x-outConPoint.back().x );
+        m_vConvexhull.push_back(outConPoint.front().x);
+        m_vConvexhull.push_back(outConPoint.back().x);
+    //    qDebug()<<"size: "<<outConPoint.size();
+//        for(size_t i=0; i<outConPoint.size(); i++)
+//        {
+//            qDebug()<<outConPoint[i].x<<outConPoint[i].y;
+//        }
+//        qDebug()<<"delta:"<<delta;
+        if( delta<0.00001 )
+        {
+            m_vRoot.push_back(outConPoint.front().x);
+        }
+        else if( delta>abs( inConPoint.front().x-inConPoint.back().x )/2 )
+        {
+            deCasteljau(0.5, inConPoint, front1, back);
+            m_lInterval.push_back( front1 );
+            m_lInterval.push_back( back );
+        }
+        else
+        {
+            m_lInterval.push_back( outConPoint );
+        }
+    }
+}
+
+void BezierClip::deCasteljau(double scale, conPoints& in,
+                             conPoints& outfront, conPoints& outback)
+{
+    conPoints current(in);
+    conPoints last;
+
+    if( !(outfront.size()==0) )
+    {
+        outfront.clear();
+    }
+
+    if( !(outback.size()==0) )
+    {
+        outback.clear();
     }
 
     outfront.resize( m_nOrder );
     outback.resize( m_nOrder );
+
     int index=1;
     outfront[0] = in[0];
     outback[ m_nOrder-1 ] = in.back();
@@ -96,12 +139,36 @@ void BezierClip::deCasteljau(double scale, std::vector<double>& in,
 
         for(size_t i=0; i<last.size()-1; i++)
         {
-            ptmp = last[i]*(1-t) + last[i+1]*t;
+            point ptmp = last[i]*(1-scale) + last[i+1]*scale;
             current.push_back(ptmp);
         }
 
         outfront[index] = current[0];
         outback[m_nOrder-1-index] = current.back();
-        intdex++;
+        index++;
     }
+}
+
+void BezierClip::drawRoots()
+{
+    glColor3f(0.0f, 1.0f, 1.0f);
+    qDebug()<<"rootsize: "<<m_vRoot.size();
+    glBegin(GL_POINTS);
+    for(size_t i= 0; i<m_vRoot.size(); i++)
+    {
+        glVertex2d(m_vRoot[i], 0.0);
+        qDebug()<<m_vRoot[i];
+    }
+
+//    glColor3f(0.6, 0.7, 0.4);
+//    for(size_t i=0; i<m_vConvexhull.size(); i++)
+//    {
+//        glVertex2d(m_vConvexhull[i], 0.0);
+//    }
+    glEnd();
+}
+
+void BezierClip::drawConvexhull(conPoints &p1, conPoints &p2)
+{
+   // glColor3f()
 }

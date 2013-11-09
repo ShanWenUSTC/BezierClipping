@@ -1,5 +1,7 @@
 #include "myOpenGL.h"
 #include "BezierCurve.h"
+#include "bezierclip.h"
+
 #include <QDebug>
 #define DRAG_POINT 1
 #define ADD_POINT 0
@@ -9,6 +11,7 @@ myOpenGL::myOpenGL(QWidget *parent)
 {
     m_pBezierCurve = new BezierCurve();
     m_status = 0;
+    m_pClip = NULL;
 }
 
 myOpenGL::~myOpenGL()
@@ -74,6 +77,11 @@ void myOpenGL::paintGL()
     m_pBezierCurve->drawCurve();
     m_pBezierCurve->drawConPoint();
 
+    if( !(m_pClip==NULL) )
+    {
+        m_pClip->drawRoots();
+    }
+
 //    test code
 //    if(m_status)
 //    {
@@ -84,7 +92,7 @@ void myOpenGL::paintGL()
 void myOpenGL::mousePressEvent(QMouseEvent *e)
 {
     double x, y;
-    int index;
+
     switch(e->button())
     {
     case Qt::LeftButton:
@@ -156,5 +164,12 @@ void myOpenGL::drawAxis()
         glVertex2f(0, 6.0);
         glVertex2f(0, -6.0);
     glEnd();
+}
+
+void myOpenGL::findRoot()
+{
+    m_pClip = new BezierClip (m_pBezierCurve);
+    m_pClip->findroot();
+    updateGL();
 }
 

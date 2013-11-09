@@ -18,6 +18,7 @@ private:
     void open();
     void clear();
     void convexhull();
+    void findRoot();
 
     void design_menubar();
     void design_toolbar();
@@ -30,6 +31,7 @@ private:
     QAction *openAction;
     QAction *clearAction;
     QAction *chAction;
+    QAction *findRootAction;
     QMenuBar *pMenuBar;
     QToolBar *pToolBar;
     QStatusBar *pStatusBar;
