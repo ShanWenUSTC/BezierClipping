@@ -80,8 +80,8 @@ void myMainWindow::findRoot()
 void myMainWindow::design_menubar()
 {
     pMenuBar = menuBar();
-    QMenu *menufile = pMenuBar->addMenu(tr("&File"));
-    menufile->addAction(openAction);
+//    QMenu *menufile = pMenuBar->addMenu(tr("&File"));
+//    menufile->addAction(openAction);
 
     QMenu *menuedit = pMenuBar->addMenu(tr("Edit"));
     menuedit->addAction(clearAction);
@@ -93,7 +93,7 @@ void myMainWindow::design_menubar()
 void myMainWindow::design_toolbar()
 {
     pToolBar = addToolBar(tr("&File"));
-    pToolBar->addAction(openAction);
+ //   pToolBar->addAction(openAction);
     pToolBar->addAction(clearAction);
     pToolBar->addAction(findRootAction);
 }
@@ -101,17 +101,17 @@ void myMainWindow::design_toolbar()
 void myMainWindow::design_statusbar()
 {
     pStatusBar = statusBar() ;
-    pStatusBar->addAction(openAction);
+ //   pStatusBar->addAction(openAction);
     pStatusBar->addAction(clearAction);
     pStatusBar->addAction(chAction);
 }
 
 void myMainWindow::design_action()
 {
-    openAction = new QAction(QIcon(":/images/doc-open"), tr("&Open..."),this);
-    openAction->setShortcut(QKeySequence::Open);
-    openAction->setStatusTip(tr("Open an existing file"));
-    connect(openAction, &QAction::triggered, this, &myMainWindow::open);
+//    openAction = new QAction(QIcon(":/images/doc-open"), tr("&Open..."),this);
+//    openAction->setShortcut(QKeySequence::Open);
+//    openAction->setStatusTip(tr("Open an existing file"));
+//    connect(openAction, &QAction::triggered, this, &myMainWindow::open);
 
     clearAction = new QAction(QIcon(":/images/clear"), tr("&Clear"), this);
     clearAction->setStatusTip(tr("Clear screen"));

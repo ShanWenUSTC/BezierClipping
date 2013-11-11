@@ -1,6 +1,7 @@
 #include "myOpenGL.h"
 #include "BezierCurve.h"
 #include "bezierclip.h"
+#include "quadclip.h"
 
 #include <QDebug>
 #define DRAG_POINT 1
@@ -21,13 +22,13 @@ myOpenGL::~myOpenGL()
 
 void myOpenGL::initializeGL()
 {
-    // 启用smooth shading
+    // enable smooth shading
     glShadeModel( GL_SMOOTH );
 
-    // 设置清屏颜色
+    // set clear color
     glClearColor( 0.5f, 0.5f, 0.5f, 0.0 );
 
-    // 设置深度缓存
+    // set depth buffer
     glClearDepth( GL_DEPTH_TEST );
 }
 
@@ -46,10 +47,10 @@ void myOpenGL::resizeGL(int width, int height)
     //    glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
     //    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 
-   // 重置当前视口
+   // reset current viewport
    glViewport( 0, 0, (GLint)width, (GLint)height );
 
-   // 选择投影矩阵
+   // set projectiong matrix
    glMatrixMode( GL_PROJECTION );
    glLoadIdentity();
 
@@ -69,7 +70,7 @@ void myOpenGL::resizeGL(int width, int height)
 
 void myOpenGL::paintGL()
 {
-    // 清除屏幕和深度缓存
+    // clear screen and depth buffer
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     drawAxis();
 
@@ -82,11 +83,6 @@ void myOpenGL::paintGL()
         m_pClip->drawRoots();
     }
 
-//    test code
-//    if(m_status)
-//    {
-//        m_pBezierCurve->drawConvexHull();
-//    }
 }
 
 void myOpenGL::mousePressEvent(QMouseEvent *e)
@@ -150,7 +146,6 @@ void myOpenGL::clear()
 
 void myOpenGL::convexhull()
 {
-  //  m_status = 1;
     updateGL();
 }
 
@@ -168,7 +163,7 @@ void myOpenGL::drawAxis()
 
 void myOpenGL::findRoot()
 {
-    m_pClip = new BezierClip (m_pBezierCurve);
+    m_pClip = new QuadClip (m_pBezierCurve);
     m_pClip->findroot();
     updateGL();
 }

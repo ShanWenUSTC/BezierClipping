@@ -20,8 +20,6 @@ public:
     int searchNearPoint(double x, double y);
     void updatePoint(int index, double x, double y);
     void clear();
-    void calConvexHull(std::vector<double> x, std::vector<double> y, 
-                       std::vector<double>& hullx, std::vector<double>& hully);
     int order();
     std::vector<point> controlPoint();
 

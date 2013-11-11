@@ -8,6 +8,7 @@
 
 class BezierCurve;
 class BezierClip;
+class QuadClip;
 class myOpenGL : public QGLWidget
 {
     Q_OBJECT
@@ -33,7 +34,7 @@ private:
 
 private:
     BezierCurve* m_pBezierCurve;
-    BezierClip *m_pClip;
+    QuadClip *m_pClip;
     GLdouble x_max;
     GLdouble y_max;
     int m_status;

@@ -18,7 +18,9 @@ SOURCES += main.cpp\
     BezierCurve.cpp \
     ClassDef.cpp \
     graham.cpp \
-    bezierclip.cpp
+    bezierclip.cpp \
+    quadclip.cpp \
+    Coef.cpp
 
 HEADERS  += myOpenGL.h \
     myMainWindow.h \
@@ -26,7 +28,9 @@ HEADERS  += myOpenGL.h \
     BezierCurve.h \
     ClassDef.h \
     graham.h \
-    bezierclip.h
+    bezierclip.h \
+    quadclip.h \
+    Coef.h
 
 INCLUDEPATH += $$quote(D:\library\trimesh\include)
 

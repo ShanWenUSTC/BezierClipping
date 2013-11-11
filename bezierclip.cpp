@@ -59,11 +59,7 @@ void BezierClip::updateInterval(conPoints& inConPoint)
     {
         if(hully[i]*hully[i+1]<0)
         {
-         //   double scale = abs( hully[i+1]/hully[i] );
             double scale = abs( hully[i+1]/( abs(hully[i+1])+abs(hully[i]) ) );
-            qDebug()<<"convex scale:"<<scale;
-//            qDebug()<<hullt[i+1]<<hullt[i];
- //           vtmp.push_back( (hullt[i]*scale+hullt[i+1])/(scale+1.0) );
             vtmp.push_back( hullt[i]*scale+hullt[i+1]*(1-scale) );
         }
     }
@@ -79,19 +75,11 @@ void BezierClip::updateInterval(conPoints& inConPoint)
         conPoints back;
         conPoints outConPoint;
 
-   //     qDebug()<<"vtmp:"<<vtmp.size()<<vtmp[0]<<vtmp[1];
         deCasteljau(vtmp[1], inConPoint, front1, back);
         deCasteljau(vtmp[0]/vtmp[1], front1, front2, outConPoint);
 
         double delta = abs( outConPoint.front().x-outConPoint.back().x );
-        m_vConvexhull.push_back(outConPoint.front().x);
-        m_vConvexhull.push_back(outConPoint.back().x);
-    //    qDebug()<<"size: "<<outConPoint.size();
-//        for(size_t i=0; i<outConPoint.size(); i++)
-//        {
-//            qDebug()<<outConPoint[i].x<<outConPoint[i].y;
-//        }
-//        qDebug()<<"delta:"<<delta;
+
         if( delta<0.00001 )
         {
             m_vRoot.push_back(outConPoint.front().x);
@@ -168,7 +156,4 @@ void BezierClip::drawRoots()
     glEnd();
 }
 
-void BezierClip::drawConvexhull(conPoints &p1, conPoints &p2)
-{
-   // glColor3f()
-}
+

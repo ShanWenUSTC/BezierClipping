@@ -86,23 +86,6 @@ void BezierCurve::drawCurve()
     }
     drawPoint.push_back( m_vConPoint.back() );
 
-//    tempPoint.push_back(m_vConPoint[0]);
-//    point ptmp;
-//    for(size_t i=0; i<m_vConPoint.size()-1; i++)
-//    {
-//        ptmp = (m_vConPoint[i] + m_vConPoint[i+1])/2;
-//        tempPoint.push_back(ptmp);
-//    }
-//    tempPoint.push_back(m_vConPoint.back());
-
-//    drawPoint.push_back(tempPoint[0]);
-//    for(size_t i=0; i<tempPoint.size()-1; i++)
-//    {
-//        ptmp = (tempPoint[i] + tempPoint[i+1])/2;
-//        drawPoint.push_back(ptmp);
-//    }
-//    drawPoint.push_back(tempPoint.back());
-
     glColor3f( 1.0f, 0.0f, 0.0f );
     glBegin(GL_LINES);
         for(size_t i=0; i<drawPoint.size()-1; i++)
@@ -167,30 +150,6 @@ void BezierCurve::updatePoint(int index, double x, double y)
 void BezierCurve::clear()
 {
     m_vConPoint.clear();
-}
-
-void BezierCurve::calConvexHull(std::vector<double> x, std::vector<double> y, 
-                                std::vector<double>& hullx, std::vector<double>& hully)
-{
-//    CGraham graham;
-//    graham.convex_hull(x, y, hullx, hully);
-//    double x;
-
-//    if( (hullx.size()==0)||(hullx.size()==1) )
-//    {
-//        return;
-//    }
-
-      return;
-
-//    glColor3f(1.0f, 1.0f, 1.0f);
-//    glBegin(GL_LINES);
-//        for(size_t i=0; i<hullx.size()-1; i++)
-//        {
-//            glVertex2d( hullx[i], hully[i] );
-//            glVertex2d( hullx[i+1], hully[i+1] );
-//        }
-//    glEnd();
 }
 
 int BezierCurve::order()

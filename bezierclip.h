@@ -17,7 +17,6 @@ public:
 
     void findroot();
     void drawRoots();
-    void drawConvexhull(conPoints& p1, conPoints& p2);
 
 private:
     void calConvexHull(std::vector<double> x, std::vector<double> y,
