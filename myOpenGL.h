@@ -1,14 +1,12 @@
 #ifndef MYOPENGL_H
 #define MYOPENGL_H
 
-#include <QGLWidget>
 #include <QEvent>
+#include <QGLWidget>
 #include <QMouseEvent>
 #include <QKeyEvent>
 
-class BezierCurve;
-class BezierClip;
-class QuadClip;
+class Clip;
 class myOpenGL : public QGLWidget
 {
     Q_OBJECT
@@ -33,8 +31,8 @@ private:
     void drawAxis();
 
 private:
-    BezierCurve* m_pBezierCurve;
-    QuadClip *m_pClip;
+    Clip* clip_pointor_;
+
     GLdouble x_max;
     GLdouble y_max;
     int m_status;

@@ -4,8 +4,7 @@
 #include <math.h>
 #include <iostream>
 #include <vector>
-
-#include "ClassDef.h"
+#include "classdef.h"
 
 typedef std::vector< std::vector<double> > mat;
 

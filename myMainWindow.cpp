@@ -1,14 +1,14 @@
+#include "myMainWindow.h"
+#include <iostream>
+#include <string>
+#include <QFileDialog>
 #include <QMenuBar>
+#include <QMessageBox>
 #include <QStatusBar>
 #include <QToolBar>
-#include <QMessageBox>
-#include <iostream>
-#include <QFileDialog>
-#include <string>
-#include <QDebug>
-
 #include "CPolynomial.h"
-#include "myMainWindow.h"
+
+#include <QDebug>
 
 myMainWindow::myMainWindow(QWidget *parent) :
     QMainWindow(parent)

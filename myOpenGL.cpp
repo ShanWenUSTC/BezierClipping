@@ -1,18 +1,14 @@
 #include "myOpenGL.h"
-#include "BezierCurve.h"
-#include "bezierclip.h"
-#include "quadclip.h"
+#include "clipbezier.h"
 
-#include <QDebug>
 #define DRAG_POINT 1
 #define ADD_POINT 0
 
 myOpenGL::myOpenGL(QWidget *parent)
     :QGLWidget(parent)
 {
-    m_pBezierCurve = new BezierCurve();
+    clip_pointor_ = new ClipBezier();
     m_status = 0;
-    m_pClip = NULL;
 }
 
 myOpenGL::~myOpenGL()
@@ -74,15 +70,14 @@ void myOpenGL::paintGL()
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     drawAxis();
 
-    m_pBezierCurve->drawConPoly();
-    m_pBezierCurve->drawCurve();
-    m_pBezierCurve->drawConPoint();
+    clip_pointor_->DrawControlPolygon();
+    clip_pointor_->DrawCurve();
+    clip_pointor_->DrawControlPoint();
 
-    if( !(m_pClip==NULL) )
+    if( !(clip_pointor_==NULL) )
     {
-        m_pClip->drawRoots();
+        clip_pointor_->DrawRoots();
     }
-
 }
 
 void myOpenGL::mousePressEvent(QMouseEvent *e)
@@ -94,7 +89,7 @@ void myOpenGL::mousePressEvent(QMouseEvent *e)
     case Qt::LeftButton:
         x = 2.0*x_max*e->pos().x()/width() - x_max;
         y = y_max - 2.0*y_max*e->pos().y()/height();
-        m_pBezierCurve->addPoint( x, y );
+        clip_pointor_->AddPoint( x, y );
         updateGL();
 
         break;
@@ -119,7 +114,7 @@ void myOpenGL::mouseMoveEvent(QMouseEvent *e)
         x = 2.0*x_max*e->pos().x()/width() - x_max;
         y = y_max - 2.0*y_max*e->pos().y()/height();
 
-        index = m_pBezierCurve->searchNearPoint(x, y);
+        index = clip_pointor_->SearchNearPoint(x, y);
 
         if( index<0 )
         {
@@ -127,7 +122,7 @@ void myOpenGL::mouseMoveEvent(QMouseEvent *e)
         }
         else
         {
-            m_pBezierCurve->updatePoint(index, x, y);
+            clip_pointor_->UpdatePoint(index, x, y);
         }
         updateGL();
 
@@ -140,7 +135,7 @@ void myOpenGL::mouseMoveEvent(QMouseEvent *e)
 
 void myOpenGL::clear()
 {
-    m_pBezierCurve->clear();
+    clip_pointor_->Clear();
     updateGL();
 }
 
@@ -163,8 +158,7 @@ void myOpenGL::drawAxis()
 
 void myOpenGL::findRoot()
 {
-    m_pClip = new QuadClip (m_pBezierCurve);
-    m_pClip->findroot();
+    clip_pointor_->FindRoots();
     updateGL();
 }
 

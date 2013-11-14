@@ -1,8 +1,8 @@
-#include "BezierCurve.h"
+#include <QtGui/qopengl.h>
+
+#include "bezier_curve.h"
 #include "graham.h"
 
-#include <QtGui/qopengl.h>
-#include <QDebug>
 BezierCurve::BezierCurve()
 {
 
@@ -18,15 +18,15 @@ float BezierCurve::base(double t)
     return t;
 }
 
-void BezierCurve::addPoint(double x, double y)
+void BezierCurve::AddPoint(double x, double y)
 {
     point v(x, y);
-    m_vConPoint.push_back( v );
+    control_points_.push_back( v );
 }
 
-void BezierCurve::drawConPoint()
+void BezierCurve::DrawControlPoint()
 {
-    if( m_vConPoint.size()==0 )
+    if( control_points_.size()==0 )
     {
         return;
     }
@@ -35,16 +35,16 @@ void BezierCurve::drawConPoint()
     glPointSize(5);
 
     glBegin(GL_POINTS);
-    for(size_t i=0; i<m_vConPoint.size(); i++)
+    for(size_t i=0; i<control_points_.size(); i++)
     {
-        glVertex2d(m_vConPoint[i].x, m_vConPoint[i].y);
+        glVertex2d(control_points_[i].x, control_points_[i].y);
     }
     glEnd();
 }
 
-void BezierCurve::drawConPoly()
+void BezierCurve::DrawControlPolygon()
 {
-    if(m_vConPoint.size()==0 || m_vConPoint.size()==1)
+    if(control_points_.size()==0 || control_points_.size()==1)
     {
         return;
     }
@@ -52,39 +52,39 @@ void BezierCurve::drawConPoly()
     glColor3f( 0.0f, 1.0f, 0.0f );
 
     glBegin(GL_LINES);
-        for(size_t i=0; i<m_vConPoint.size(); i++)
+        for(size_t i=0; i<control_points_.size(); i++)
         {
-            if(m_vConPoint.size()-1 == i)
+            if(control_points_.size()-1 == i)
             {
                 break;
             }
 
-            glVertex2d(m_vConPoint[i].x, m_vConPoint[i].y);
-            glVertex2d(m_vConPoint[i+1].x, m_vConPoint[i+1].y);
+            glVertex2d(control_points_[i].x, control_points_[i].y);
+            glVertex2d(control_points_[i+1].x, control_points_[i+1].y);
         }
     glEnd();
 }
 
-void BezierCurve::drawCurve()
+void BezierCurve::DrawCurve()
 {
     std::vector<point> drawPoint;
     std::vector<point> tempPoint;
 
-    if( (m_vConPoint.size()==0)||(m_vConPoint.size()==1)||(m_vConPoint.size()==2) )
+    if( (control_points_.size()==0)||(control_points_.size()==1)||(control_points_.size()==2) )
     {
         return;
     }
 
-    double dx = 1.0/(m_vConPoint.size()-1)/20;
+    double dx = 1.0/(control_points_.size()-1)/20;
     double t = dx;
 
-    drawPoint.push_back( m_vConPoint[0] );
+    drawPoint.push_back( control_points_[0] );
     while(t<1)
     {
         drawPoint.push_back( deCasteljau(t) );
         t += dx;
     }
-    drawPoint.push_back( m_vConPoint.back() );
+    drawPoint.push_back( control_points_.back() );
 
     glColor3f( 1.0f, 0.0f, 0.0f );
     glBegin(GL_LINES);
@@ -99,7 +99,7 @@ void BezierCurve::drawCurve()
 point BezierCurve::deCasteljau(double t)
 {
     point ptmp;
-    std::vector<point> currentPoint(m_vConPoint);
+    std::vector<point> currentPoint(control_points_);
     std::vector<point> lastPoint;
 
     while(currentPoint.size() != 1)
@@ -117,16 +117,16 @@ point BezierCurve::deCasteljau(double t)
     return currentPoint[0];
 }
 
-int BezierCurve::searchNearPoint(double x, double y)
+int BezierCurve::SearchNearPoint(double x, double y)
 {
     float ftmp;
     float fmin = 100000000;
     int index = 0;
 
-    for(size_t i=0; i<m_vConPoint.size(); i++)
+    for(size_t i=0; i<control_points_.size(); i++)
     {
-        ftmp = (m_vConPoint[i].x-x)*(m_vConPoint[i].x-x)
-                +(m_vConPoint[i].y-y)*(m_vConPoint[i].y-y);
+        ftmp = (control_points_[i].x-x)*(control_points_[i].x-x)
+                +(control_points_[i].y-y)*(control_points_[i].y-y);
         if(ftmp<fmin)
         {
             index = i;
@@ -141,23 +141,23 @@ int BezierCurve::searchNearPoint(double x, double y)
     return index;
 }
 
-void BezierCurve::updatePoint(int index, double x, double y)
+void BezierCurve::UpdatePoint(int index, double x, double y)
 {
-    m_vConPoint[index].x = x;
-    m_vConPoint[index].y = y;
+    control_points_[index].x = x;
+    control_points_[index].y = y;
 }
 
-void BezierCurve::clear()
+void BezierCurve::Clear()
 {
-    m_vConPoint.clear();
+    control_points_.clear();
 }
 
 int BezierCurve::order()
 {
-    return m_vConPoint.size();
+    return control_points_.size();
 }
 
-std::vector<point> BezierCurve::controlPoint()
+std::vector<point> BezierCurve::control_points()
 {
-    return m_vConPoint;
+    return control_points_;
 }

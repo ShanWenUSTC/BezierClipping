@@ -3,7 +3,7 @@
 
 #include <list>
 #include <vector>
-#include "ClassDef.h"
+#include "classdef.h"
 
 typedef Point2 point;
 typedef std::vector<point> conPoints;

@@ -10,7 +10,7 @@ CGraham::~CGraham()
 
 }
 
-double CGraham::cross(const Point &O, const Point &A, const Point &B)
+double CGraham::cross(const Point_ &O, const Point_ &A, const Point_ &B)
 {
     return (A.x - O.x) * (B.y - O.y) - (A.y - O.y) * (B.x - O.x);
 }
@@ -24,11 +24,11 @@ void CGraham::convex_hull(vector<double> x, vector<double> y, vector<double> &m_
     }
     int n = x.size();
     int k = 0;
-    vector<Point> P;
-    vector<Point> H(2*n);
+    vector<Point_> P;
+    vector<Point_> H(2*n);
     for(int i = 0; i != n; i++)
     {
-        Point p;
+        Point_ p;
         p.x = x[i];
         p.y = y[i];
         P.push_back(p);

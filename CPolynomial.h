@@ -1,10 +1,8 @@
 #ifndef CPOLYNOMIAL_H
 #define CPOLYNOMIAL_H
 
-
-#include <vector>
 #include <string>
-#include <QString>
+#include <vector>
 
 using namespace std;
 

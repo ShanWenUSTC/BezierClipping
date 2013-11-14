@@ -15,22 +15,24 @@ SOURCES += main.cpp\
     myOpenGL.cpp \
     myMainWindow.cpp \
     CPolynomial.cpp \
-    BezierCurve.cpp \
-    ClassDef.cpp \
     graham.cpp \
-    bezierclip.cpp \
     quadclip.cpp \
-    Coef.cpp
+    Coef.cpp \
+    clipbezier.cpp \
+    bezier_curve.cpp \
+    clip.cpp \
+    classdef.cpp
 
 HEADERS  += myOpenGL.h \
     myMainWindow.h \
     CPolynomial.h \
-    BezierCurve.h \
-    ClassDef.h \
     graham.h \
-    bezierclip.h \
     quadclip.h \
-    Coef.h
+    Coef.h \
+    clipbezier.h \
+    bezier_curve.h \
+    clip.h \
+    classdef.h
 
 INCLUDEPATH += $$quote(D:\library\trimesh\include)
 

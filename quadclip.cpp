@@ -1,5 +1,5 @@
 #include "quadclip.h"
-#include "BezierCurve.h"
+#include "bezier_curve.h"
 #include "Coef.h"
 
 #include <QtGui/qopengl.h>
@@ -30,7 +30,7 @@ void QuadClip::findroot()
         m_lInterval.clear();
     }
 
-    m_lInterval.push_back( m_pBezierCurve->controlPoint() );
+    m_lInterval.push_back( m_pBezierCurve->control_points() );
 
     while( !(m_lInterval.size()==0) )
     {

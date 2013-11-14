@@ -1,6 +1,7 @@
 #include "CPolynomial.h"
-#include <iostream>
 #include <fstream>
+#include <iostream>
+
 #include <QDebug>
 
 using namespace std;

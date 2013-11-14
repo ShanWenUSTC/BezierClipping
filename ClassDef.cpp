@@ -1,4 +1,4 @@
-#include "ClassDef.h"
+#include "classdef.h"
 
 /////////////////////////////////////
 // class Point2
