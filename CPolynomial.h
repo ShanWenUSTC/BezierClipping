@@ -25,7 +25,7 @@ public:
     //void Print();
     float value(float x);
     void test();
-
+//jiangluo sb
 
     void ReadFromFile(const char* file);
   //  void AddOneTerm(Node term);   // add one term into m_Polynomial
